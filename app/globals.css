@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+/* Same French New Wave palette as Caption the City, so the admin feels like
+   the back room of the same cinema: the editing suite. */
+:root {
+  --background: #f3eee4;
+  --foreground: #111111;
+  --muted: #5c574f;
+  --rule: #d9d1c2;
+  --rouge: #d7261e;
+  --bleu: #1d3fbb;
+  --card: #fbf8f2;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-rouge: var(--rouge);
+  --color-bleu: var(--bleu);
+  --color-card: var(--card);
+  --font-display: var(--font-anton);
+  --font-mono: var(--font-courier-prime);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-courier-prime), "Courier New", monospace;
+}
