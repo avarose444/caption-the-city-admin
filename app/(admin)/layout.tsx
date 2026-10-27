@@ -7,7 +7,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/">) {
 
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
-      <aside className="flex flex-col gap-4 bg-black p-4 text-white md:sticky md:top-0 md:h-screen md:w-60 md:shrink-0">
+      <aside className="flex flex-col gap-4 bg-black p-4 text-white md:sticky md:top-0 md:h-screen md:w-64 md:shrink-0 md:overflow-y-auto">
         <Link href="/" className="block">
           <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">Caption the City</span>
           <span className="block font-display text-2xl uppercase leading-none">

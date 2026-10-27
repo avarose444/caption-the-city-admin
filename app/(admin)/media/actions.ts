@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/admin";
-import { generateCaptions } from "@/lib/gemini";
+import { generateCaptions } from "@/lib/pipeline";
 import { NEIGHBORHOODS } from "@/lib/neighborhoods";
 
 export type ActionState = { error?: string; success?: string };
@@ -39,7 +39,16 @@ export async function createPhoto(_prev: ActionState, formData: FormData): Promi
   let generated: Awaited<ReturnType<typeof generateCaptions>> | null = null;
   if (count > 0) {
     try {
-      generated = await generateCaptions({ imageBase64: bytes.toString("base64"), mimeType: photo.type, neighborhood, note, count });
+      generated = await generateCaptions({
+        supabase,
+        userId: user.id,
+        source: "admin",
+        imageBase64: bytes.toString("base64"),
+        mimeType: photo.type,
+        neighborhood,
+        note,
+        count,
+      });
     } catch (error) {
       return { error: (error as Error).message };
     }
@@ -57,6 +66,9 @@ export async function createPhoto(_prev: ActionState, formData: FormData): Promi
     .single();
   if (error) return { error: error.message };
 
+  if (generated?.requestId) {
+    await supabase.from("generation_requests").update({ photo_id: saved.id }).eq("id", generated.requestId);
+  }
   if (generated) {
     const { error: captionError } = await supabase.from("captions").insert(
       generated.captions.map((body) => ({ photo_id: saved.id, user_id: user.id, body, prompt: generated.prompt, model: generated.model })),
@@ -81,13 +93,13 @@ export async function updatePhoto(photoId: string, _prev: ActionState, formData:
 }
 
 // DELETE a photo, its captions and votes (cascade), and its file.
-export async function deletePhoto(photoId: string) {
+export async function deletePhoto(photoId: string): Promise<ActionState> {
   const { supabase } = await requireAdmin();
   const { data: photo } = await supabase.from("photos").select("id, storage_path").eq("id", photoId).maybeSingle();
   if (!photo) redirect("/media");
 
   const { error } = await supabase.from("photos").delete().eq("id", photo.id);
-  if (error) throw new Error(error.message);
+  if (error) return { error: error.message };
   if (photo.storage_path) await supabase.storage.from("city-photos").remove([photo.storage_path]);
 
   revalidatePath("/media");
@@ -126,6 +138,10 @@ export async function generateForPhoto(photoId: string, _prev: ActionState, form
   let result;
   try {
     result = await generateCaptions({
+      supabase,
+      userId: user.id,
+      source: "admin",
+      photoId: photo.id,
       imageBase64: bytes.toString("base64"),
       mimeType: image.headers.get("content-type") ?? "image/jpeg",
       neighborhood: photo.neighborhood,
@@ -161,10 +177,11 @@ export async function updateCaption(captionId: string, photoId: string, _prev: A
 }
 
 // DELETE a caption (and its votes, by cascade).
-export async function deleteCaption(captionId: string, photoId: string) {
+export async function deleteCaption(captionId: string, photoId: string): Promise<ActionState> {
   const { supabase } = await requireAdmin();
   const { error } = await supabase.from("captions").delete().eq("id", captionId);
-  if (error) throw new Error(error.message);
+  if (error) return { error: error.message };
   revalidatePath(`/media/${photoId}`);
   revalidatePath("/media");
+  return {};
 }

@@ -4,12 +4,26 @@ The superadmin area for [Caption the City](https://github.com/avarose444/hellowo
 
 ## What's here
 
-| Route | What it does | Access |
+| Area | Route | Access |
 |---|---|---|
-| `/` | **Le Tableau**: statistics dashboard (crowd favorite, most divisive caption, the flop, votes per day, a weekday × hour "when does the city laugh?" heatmap, whether Gemini's first caption beats its later ones, caption length vs score, neighborhoods, a model scoreboard, voter personalities, top posters, members' favorite films) | read |
-| `/users`, `/users/[id]` | Users & profiles, with each member's photos, votes cast, and net score | **read** |
-| `/media`, `/media/new`, `/media/[id]` | Photos and their AI-generated captions: upload a photo and have Gemini caption it, generate more captions, write one by hand, edit caption text/model, edit photo details, delete captions or whole photos | **create / read / update / delete** |
-| `/votes` | Every upvote and downvote, filterable, plus the most-rated captions | **read** |
+| Statistics dashboard | `/` | read |
+| Users / profiles | `/users`, `/users/[id]` | read |
+| Allowed signup domains | `/signup-domains` | create / read / update / delete |
+| Whitelisted e-mail addresses | `/whitelist` | create / read / update / delete |
+| Images (with upload) and AI-generated captions | `/media`, `/media/new`, `/media/[id]` | create / read / update / delete |
+| Upvotes / downvotes / ratings | `/votes` | read |
+| Terms | `/terms` | create / read / update / delete |
+| Prompt chains and their steps | `/chains`, `/chains/[id]` | read |
+| Prompt chain mix | `/mix` | read / update |
+| AI generation examples | `/examples` | create / read / update / delete |
+| LLM models | `/models` | create / read / update / delete |
+| LLM providers | `/providers` | create / read / update / delete |
+| Generation requests (with each request's model calls) | `/requests`, `/requests/[id]` | read |
+| LLM responses, with per-model health | `/responses` | read |
+
+### The AI pipeline is data
+
+`lib/pipeline.ts` (the same file lives in Caption the City) generates captions from the database. It picks a prompt chain by the `prompt_chain_mix` weights, runs that chain's steps in order (each step's output becomes `{{previous}}` in the next), fills `{{terms}}` and `{{examples}}` from their tables, and tries active models in priority order when one is overloaded. Every request goes to `generation_requests` and every model call (prompt, response, HTTP status, latency) to `llm_responses`, which is what the Observability pages read. If the tables are missing, it falls back to the original built-in prompt.
 
 ## Security: three locks
 
@@ -29,7 +43,7 @@ After that, other admins can be promoted the same way.
 
 ## Setup
 
-1. Run `supabase/admin.sql` in the Supabase SQL editor (after the main app's `profiles.sql` and `captions.sql`), with your email in the last line.
+1. Run `supabase/admin.sql` in the Supabase SQL editor (after the main app's `profiles.sql` and `captions.sql`), with your email in the last line, then `supabase/observability.sql` (creates and seeds the pipeline tables and backfills a request log for existing photos).
 2. Env vars (`.env.local` locally, and in Vercel): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `GEMINI_API_KEY`.
 3. Supabase → Authentication → URL Configuration: add the admin's URLs to **Redirect URLs**, e.g. `https://*-<your-team>.vercel.app/**` and `http://localhost:3000/**`.
 4. `npm install && npm run dev`.
