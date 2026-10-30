@@ -38,8 +38,8 @@ export default async function Dashboard() {
   return (
     <div className="space-y-6">
       <header>
-        <p className={eyebrowClass}>Le Tableau · Rushes du jour</p>
-        <h1 className="mt-1 font-display text-5xl uppercase leading-none">The Dailies</h1>
+        <p className={eyebrowClass}>Dashboard</p>
+        <h1 className="mt-1 font-display text-5xl uppercase leading-none">At a glance</h1>
         <p className="mt-2 max-w-2xl font-mono text-sm text-muted">
           What New York is photographing, what Gemini is writing about it, and what the crowd actually finds funny.
         </p>
@@ -54,13 +54,13 @@ export default async function Dashboard() {
       </div>
 
       <div className="grid gap-6 xl:grid-cols-3">
-        <Panel title="Crowd favorite" kicker="Palme d'Or">
+        <Panel title="Crowd favorite" kicker="Highest net score">
           <CaptionStill caption={s.best} tag="Best" />
         </Panel>
         <Panel title="Most divisive" kicker="The critics are split">
           <CaptionStill caption={s.divisive} tag="Split" />
         </Panel>
-        <Panel title="The flop" kicker="Un navet">
+        <Panel title="The flop" kicker="Lowest net score">
           <CaptionStill caption={s.worst} tag="Worst" />
         </Panel>
       </div>
@@ -206,7 +206,7 @@ export default async function Dashboard() {
             <Empty>No photos yet.</Empty>
           )}
         </Panel>
-        <Panel title="The members' cinémathèque" kicker="Favorite films on profiles">
+        <Panel title="Members' favorite films" kicker="Favorite films on profiles">
           {s.films.length ? (
             <BarList rows={s.films.map((f) => ({ label: f.film, value: f.count, display: `${f.count}` }))} />
           ) : (

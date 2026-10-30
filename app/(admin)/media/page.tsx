@@ -25,7 +25,7 @@ export default async function MediaPage({ searchParams }: PageProps<"/media">) {
     <div className="space-y-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className={eyebrowClass}>Les Médias · create, read, update, delete</p>
+          <p className={eyebrowClass}>Images & AI captions · create, read, update, delete</p>
           <h1 className="mt-1 font-display text-5xl uppercase leading-none">AI-generated media</h1>
           <p className="mt-2 max-w-xl font-mono text-sm text-muted">
             Every photo and the Gemini-written captions on it. Open a photo to edit or delete it, rewrite captions, or have Gemini write more.

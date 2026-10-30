@@ -163,18 +163,16 @@ export function CaptionStill({
 }) {
   if (!caption) return <Empty>Not enough votes yet.</Empty>;
   return (
-    <figure>
-      <div className="relative aspect-[4/3] overflow-hidden border-2 border-black bg-black">
+    <figure className="border-2 border-black bg-black">
+      <div className="relative aspect-[4/3] overflow-hidden">
         {caption.photo && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={caption.photo.image_url} alt="" className="h-full w-full object-cover opacity-90" />
+          <img src={caption.photo.image_url} alt="" className="h-full w-full object-cover" />
         )}
         <span className="absolute left-2 top-2 bg-rouge px-2 py-0.5 font-display text-xs uppercase tracking-widest text-white">{tag}</span>
-        <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-3 pb-3 pt-8 text-center font-mono text-sm font-bold text-[#fff6c8]">
-          {caption.body}
-        </figcaption>
       </div>
-      <p className="mt-2 font-mono text-xs text-muted">
+      <figcaption className="border-t-2 border-black px-3 py-2 text-center font-mono text-sm font-bold text-white">{caption.body}</figcaption>
+      <p className="border-t-2 border-black bg-card px-3 py-2 font-mono text-xs text-muted">
         ▲ {caption.upvotes} · ▼ {caption.downvotes} · net {caption.score > 0 ? "+" : ""}
         {caption.score}
         {caption.photo?.neighborhood && ` · ${caption.photo.neighborhood}`}

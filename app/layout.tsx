@@ -15,7 +15,7 @@ const courierPrime = Courier_Prime({
 });
 
 export const metadata: Metadata = {
-  title: "La Salle de Montage · Caption the City Admin",
+  title: "Caption the City Admin",
   description: "Superadmin area for Caption the City.",
   robots: { index: false, follow: false },
 };

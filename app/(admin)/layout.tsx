@@ -11,7 +11,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/">) {
         <Link href="/" className="block">
           <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">Caption the City</span>
           <span className="block font-display text-2xl uppercase leading-none">
-            Salle <span className="text-rouge">de</span> Montage
+            Admin <span className="text-rouge">area</span>
           </span>
         </Link>
         <AdminNav />

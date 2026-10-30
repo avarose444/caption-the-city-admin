@@ -34,7 +34,7 @@ export default async function UsersPage({ searchParams }: PageProps<"/users">) {
     <div className="space-y-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className={eyebrowClass}>Les Membres · read only</p>
+          <p className={eyebrowClass}>Users · read only</p>
           <h1 className="mt-1 font-display text-5xl uppercase leading-none">Users & profiles</h1>
           <p className="mt-2 font-mono text-sm text-muted">
             {profiles.length} members · {profiles.filter((p) => p.is_superadmin).length} superadmin

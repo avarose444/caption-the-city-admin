@@ -26,15 +26,15 @@ export default async function PhotoPage({ params }: PageProps<"/media/[id]">) {
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
         <div className="space-y-4">
-          <div className="relative overflow-hidden border-2 border-black bg-black">
+          <figure className="border-2 border-black bg-black">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={photo.image_url} alt={photo.note ?? ""} className="max-h-[70vh] w-full object-contain" />
             {captions[0] && (
-              <p className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pb-4 pt-10 text-center font-mono text-base font-bold text-[#fff6c8]">
+              <figcaption className="border-t-2 border-black px-4 py-3 text-center font-mono text-base font-bold text-white">
                 {captions[0].body}
-              </p>
+              </figcaption>
             )}
-          </div>
+          </figure>
           <p className="font-mono text-xs text-muted">
             Posted by{" "}
             <Link href={`/users/${photo.user_id}`} className="underline underline-offset-4">{displayName(poster)}</Link>{" "}

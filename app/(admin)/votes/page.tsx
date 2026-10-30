@@ -64,7 +64,7 @@ export default async function VotesPage({ searchParams }: PageProps<"/votes">) {
   return (
     <div className="space-y-6">
       <header>
-        <p className={eyebrowClass}>Les Votes · read only</p>
+        <p className={eyebrowClass}>Votes · read only</p>
         <h1 className="mt-1 font-display text-5xl uppercase leading-none">Upvotes, downvotes & ratings</h1>
       </header>
 

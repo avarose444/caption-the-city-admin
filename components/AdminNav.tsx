@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const GROUPS = [
-  { title: "Overview", links: [{ href: "/", label: "Le Tableau", hint: "Statistics" }] },
+  { title: "Overview", links: [{ href: "/", label: "Dashboard", hint: "Statistics" }] },
   {
     title: "People",
     links: [
